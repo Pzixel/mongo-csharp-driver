@@ -15,7 +15,8 @@
     <Copyright>Copyright © 2010-present MongoDB Inc.</Copyright>
     <Description>Legacy MongoDB supported driver for MongoDB.  See http://www.mongodb.org/display/DOCS/CSharp+Language+Center for more details.</Description>
     <Authors>vincentkam;dmitry_lukyanov;rstam;craiggwilson</Authors>
-    <PackageId>mongocsharpdriver</PackageId>
+    <PackageId>Atlas.mongocsharpdriver</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
     <PackageIcon>packageIcon.png</PackageIcon>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageDescription>This package contains the legacy driver. The new driver's package name is MongoDB.Driver</PackageDescription>
@@ -26,16 +27,8 @@
     <IncludeSymbols>true</IncludeSymbols>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Version)'==''">
-    <Version>0.0.0-local</Version>
-  </PropertyGroup>
-
   <PropertyGroup>
     <DefineConstants>TRACE</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard1.5'">
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
   </PropertyGroup>
 
   <PropertyGroup>
