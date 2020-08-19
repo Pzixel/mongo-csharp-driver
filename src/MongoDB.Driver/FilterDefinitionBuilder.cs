@@ -1600,15 +1600,15 @@ namespace MongoDB.Driver
 
     internal sealed class ExprFilterDefinition<TDocument> : FilterDefinition<TDocument>
     {
-        public BsonValue AggregatePipeLine { get; }
+        private readonly BsonValue _aggregatePipeLine;
 
         public ExprFilterDefinition(BsonValue aggregatePipeLine)
         {
-            AggregatePipeLine = Ensure.IsNotNull(aggregatePipeLine, nameof(aggregatePipeLine));
+            _aggregatePipeLine = Ensure.IsNotNull(aggregatePipeLine, nameof(aggregatePipeLine));
         }
 
         public override BsonDocument Render(IBsonSerializer<TDocument> documentSerializer, IBsonSerializerRegistry serializerRegistry)
-            => new BsonDocument("$expr", AggregatePipeLine);
+            => new BsonDocument("$expr", _aggregatePipeLine);
     }
 
     internal sealed class ArrayOperatorFilterDefinition<TDocument, TItem> : FilterDefinition<TDocument>
