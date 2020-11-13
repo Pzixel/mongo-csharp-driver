@@ -14,12 +14,7 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
-using MongoDB.Driver.Core.Misc;
 using Xunit;
 
 namespace MongoDB.Driver.Core.Misc
@@ -27,6 +22,8 @@ namespace MongoDB.Driver.Core.Misc
     public class SemanticVersionTests
     {
         [Theory]
+        [InlineData(null, null, 0)]
+        [InlineData(null, "1.0.0", -1)]
         [InlineData("1.0.0", null, 1)]
         [InlineData("1.0.0", "1.0.0", 0)]
         [InlineData("1.1.0", "1.1.0", 0)]
@@ -40,12 +37,34 @@ namespace MongoDB.Driver.Core.Misc
         [InlineData("1.0.1", "1.0.0", 1)]
         [InlineData("1.0.0-alpha", "1.0.0-beta", -1)]
         [InlineData("1.0.0-beta", "1.0.0-alpha", 1)]
+        [InlineData("4.4.0-rc12", "4.4.0-rc12", 0)]
+        [InlineData("4.4.0-rc12", "4.4.0", -1)]
+        [InlineData("4.4.1-rc12", "4.4.0", 1)]
+        [InlineData("4.4.0-rc13", "4.4.0-rc12", 1)]
+        [InlineData("4.5.0-489-gb8f58d7", "4.5.0-489-gb8f58d7", 0)]
+        [InlineData("4.5.0-489-gb8f58d7", "4.5.1", -1)]
+        [InlineData("4.5.0-489-gb8f58d7", "4.5.0", 1)]
+        [InlineData("4.5.0-489-gb8f58d7", "4.5.0-5-g5a9a742f6f", 1)]
+        [InlineData("4.4.0-rc12-5-g5a9a742f6f", "4.4.0-rc12-5-g5a9a742f6f", 0)]
+        [InlineData("4.4.0-rc12-5-g5a9a742f6f", "4.4.0-rc13", -1)]
+        [InlineData("4.4.0-rc12-5-g5a9a742f6f", "4.4.0-rc12", 1)]
+        [InlineData("4.4.0-rc12-5-g5a9a742f6f", "4.4.0-rc12-4-g5a9a742f6f", 1)]
+        [InlineData("4.4.0-rc12-5-g5a9a742f6f", "4.4.0-rc13-5-g5a9a742f6f", -1)]
+        [InlineData("4.4.0-alpha1", "4.4.0-alpha", 1)]
+        [InlineData("4.4.0-alpha3", "4.4.0-beta1", -1)]
+        [InlineData("4.4.0-alpha0", "4.4.0-alpha", 1)]
+        [InlineData("4.4.0-alpha2", "4.4.0-alpha1", 1)]
+        [InlineData("4.4.0-alpha2", "4.4.0-alpha11", -1)]
+        [InlineData("4.4.0-alpha", "4.4.0", -1)]
+        [InlineData("4.4.0-alpha", "4.4.0-alpha", 0)]
+        [InlineData("4.4.0-beta", "4.4.0-5-g5a9a742f6f", -1)]
+        [InlineData("4.4.0-alpha12-5-g5a9a742f6f", "4.4.0-rc13-5-g5a9a742f6f", -1)]
         public void Comparisons_should_be_correct(string a, string b, int comparison)
         {
-            var subject = SemanticVersion.Parse(a);
+            var subject = a == null ? null : SemanticVersion.Parse(a);
             var comparand = b == null ? null : SemanticVersion.Parse(b);
-            subject.Equals(comparand).Should().Be(comparison == 0);
-            subject.CompareTo(comparand).Should().Be(comparison);
+            subject?.Equals(comparand).Should().Be(comparison == 0);
+            subject?.CompareTo(comparand).Should().Be(comparison);
             (subject == comparand).Should().Be(comparison == 0);
             (subject != comparand).Should().Be(comparison != 0);
             (subject > comparand).Should().Be(comparison == 1);
@@ -89,6 +108,7 @@ namespace MongoDB.Driver.Core.Misc
         [InlineData("1.0.3-rc", 1, 0, 3, "rc")]
         [InlineData("1.0.3-rc1", 1, 0, 3, "rc1")]
         [InlineData("1.0.3-rc.2.3", 1, 0, 3, "rc.2.3")]
+        [InlineData("4.4.0-rc12-5-g5a9a742f6f", 4, 4, 0, "rc12-5-g5a9a742f6f")]
         public void ToString_should_render_a_correct_semantic_version_string(string versionString, int major, int minor, int patch, string preRelease)
         {
             var subject = new SemanticVersion(major, minor, patch, preRelease);

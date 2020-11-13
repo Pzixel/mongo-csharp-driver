@@ -229,6 +229,19 @@ functions:
       params:
         file: mo-expansion.yml
 
+  bootstrap-mongohoused:
+    - command: shell.exec
+      params:
+        script: |
+          DRIVERS_TOOLS="${DRIVERS_TOOLS}" \
+          sh ${DRIVERS_TOOLS}/.evergreen/atlas_data_lake/build-mongohouse-local.sh
+    - command: shell.exec
+      params:
+        background: true
+        script: |
+          DRIVERS_TOOLS="${DRIVERS_TOOLS}" \
+          sh ${DRIVERS_TOOLS}/.evergreen/atlas_data_lake/run-mongohouse-local.sh
+
   run-tests:
     - command: shell.exec
       type: test
@@ -238,6 +251,11 @@ functions:
           set +x
           export FLE_AWS_ACCESS_KEY_ID=${FLE_AWS_ACCESS_KEY_ID}
           export FLE_AWS_SECRET_ACCESS_KEY=${FLE_AWS_SECRET_ACCESS_KEY}
+          export FLE_AZURE_TENANT_ID=${FLE_AZURE_TENANT_ID}
+          export FLE_AZURE_CLIENT_ID=${FLE_AZURE_CLIENT_ID}
+          export FLE_AZURE_CLIENT_SECRET=${FLE_AZURE_CLIENT_SECRET}
+          export FLE_GCP_EMAIL=${FLE_GCP_EMAIL}
+          export FLE_GCP_PRIVATE_KEY=${FLE_GCP_PRIVATE_KEY}
           ${PREPARE_SHELL}
           SSL=${SSL} evergreen/add-certs-if-needed.sh
           AUTH=${AUTH} \
@@ -420,6 +438,15 @@ functions:
         script: |
           ${PREPARE_SHELL}
           evergreen/run-mongodb-aws-test.sh
+
+  run-atlas-data-lake-test:
+    - command: shell.exec
+      type: test
+      params:
+        working_dir: mongo-csharp-driver
+        script: |
+          ${PREPARE_SHELL}
+          evergreen/run-atlas-data-lake-test.sh
 
   run-ocsp-test:
     - command: shell.exec
@@ -656,6 +683,11 @@ tasks:
         - func: run-aws-auth-test-with-aws-credentials-and-session-token-as-environment-variables
         - func: run-aws-auth-test-with-aws-EC2-credentials
         # ECS test is skipped untill testing on Linux becomes possible
+
+    - name: atlas-data-lake-test
+      commands:
+        - func: bootstrap-mongohoused
+        - func: run-atlas-data-lake-test
 
     - name: publish-snapshot
       depends_on:
@@ -1158,8 +1190,8 @@ buildvariants:
     - name: ".ocsp"
 
 - matrix_name: aws-auth-tests
-  matrix_spec: { version: ["latest"], topology: "standalone", os: "*" }
-  display_name: "MONGODB-AWS Auth test"
+  matrix_spec: { version: ["4.4", "latest"], topology: "standalone", os: "*" }
+  display_name: "MONGODB-AWS Auth test ${version} ${os}"
   run_on:
     - windows-64-vs2017-test
   tasks:
@@ -1171,6 +1203,13 @@ buildvariants:
     - windows-64-vs2017-test
   tasks:
     - name: atlas-connectivity-tests
+
+- name: atlas-data-lake-test
+  display_name: "Atlas Data Lake Tests"
+  run_on:
+    - windows-64-vs2017-test
+  tasks:
+    - name: atlas-data-lake-test
 
 # - name: plain-auth-tests
 #   display_name: "PLAIN (LDAP) Auth tests"
