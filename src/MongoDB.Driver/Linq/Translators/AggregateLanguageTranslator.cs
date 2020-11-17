@@ -21,6 +21,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver.Linq.Expressions;
@@ -232,6 +233,21 @@ namespace MongoDB.Driver.Linq.Translators
 
         private BsonValue TranslateConditional(ConditionalExpression node)
         {
+            // short path for `if x == null then null else foo(x)` => just `foo(x)` since mongo get all nulls propagated automatically
+            if ((node.Test.NodeType == ExpressionType.Equal || node.Test.NodeType == ExpressionType.NotEqual)
+                && (node.Test as BinaryExpression)?.Right is ConstantExpression constantExpression
+                && constantExpression.Value is null)
+            {
+                if (node.IfTrue is ConstantExpression trueConstantExpression && trueConstantExpression.Value is null)
+                {
+                    return TranslateValue(node.IfFalse);
+                }
+
+                if (node.IfFalse is ConstantExpression falseConstantExpression && falseConstantExpression.Value is null)
+                {
+                    return TranslateValue(node.IfTrue);
+                }
+            }
             var condition = TranslateValue(node.Test);
             var truePart = TranslateValue(node.IfTrue);
             var falsePart = TranslateValue(node.IfFalse);
@@ -1333,6 +1349,19 @@ namespace MongoDB.Driver.Linq.Translators
                     if (node.Arguments.Count == 0)
                     {
                         result = new BsonDocument("$toUpper", field);
+                        return true;
+                    }
+                    break;
+                case nameof(string.Contains):
+                    if (node.Arguments.Count == 1
+                        && node.Arguments.Single() is ConstantExpression containsRhsExpression
+                        && containsRhsExpression.Type == typeof(string))
+                    {
+                        result = new BsonDocument("$regexMatch",
+                            new BsonDocument(new Dictionary<string, object>
+                            {
+                                ["input"] = field, ["regex"] = Regex.Escape((string) containsRhsExpression.Value)
+                            }));
                         return true;
                     }
                     break;

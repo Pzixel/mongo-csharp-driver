@@ -19,7 +19,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageDescription>Official .NET driver for MongoDB.</PackageDescription>
     <PackageId>Atlas.MongoDB.Driver</PackageId>
-    <PackageVersion>1.0.2</PackageVersion>
+    <PackageVersion>1.0.4</PackageVersion>
     <PackageProjectUrl>http://www.mongodb.org/display/DOCS/CSharp+Language+Center</PackageProjectUrl>
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <PackageTags>mongodb;mongo;nosql</PackageTags>
@@ -49,8 +49,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Atlas.MongoDB.Bson" Version="1.0.0" />
-    <PackageReference Include="Atlas.MongoDB.Driver.Core" Version="1.0.0" />
+    <PackageReference Include="Atlas.MongoDB.Bson" Version="1.0.1" />
+    <PackageReference Include="Atlas.MongoDB.Driver.Core" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>

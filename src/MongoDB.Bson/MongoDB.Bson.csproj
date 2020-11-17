@@ -17,7 +17,7 @@
     <Authors>vincentkam;dmitry_lukyanov;rstam;craiggwilson</Authors>
     <PackageIcon>packageIcon.png</PackageIcon>
     <PackageId>Atlas.MongoDB.Bson</PackageId>
-    <PackageVersion>1.0.0</PackageVersion>
+    <PackageVersion>1.0.1</PackageVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageDescription>MongoDB's Official Bson Library.</PackageDescription>
     <PackageProjectUrl>http://www.mongodb.org/display/DOCS/CSharp+Language+Center</PackageProjectUrl>
