@@ -18,9 +18,12 @@ using MongoDB.Driver.Linq.Processors.Transformers;
 
 namespace MongoDB.Driver.Linq.Processors
 {
-    internal sealed class Transformer : ExpressionVisitor
+    /// <summary>
+    /// TBD
+    /// </summary>
+    public sealed class Transformer : ExpressionVisitor
     {
-        private static ExpressionTransformerRegistry __registry;
+        private static readonly ExpressionTransformerRegistry __registry;
 
         static Transformer()
         {
@@ -38,7 +41,18 @@ namespace MongoDB.Driver.Linq.Processors
             __registry.Register(new VBInformationIsNothingTransformer());
         }
 
-        public static Expression Transform(Expression node)
+        /// <summary>
+        /// TBD
+        /// </summary>
+        /// <param name="transformer"></param>
+        /// <typeparam name="TExpression"></typeparam>
+        public static void Register<TExpression>(IExpressionTransformer<TExpression> transformer)
+            where TExpression : Expression
+        {
+            __registry.Register(transformer);
+        }
+
+        internal static Expression Transform(Expression node)
         {
             var transformer = new Transformer();
             return transformer.Visit(node);
@@ -48,6 +62,7 @@ namespace MongoDB.Driver.Linq.Processors
         {
         }
 
+        /// <inheritdoc />
         public override Expression Visit(Expression node)
         {
             var visited = base.Visit(node);

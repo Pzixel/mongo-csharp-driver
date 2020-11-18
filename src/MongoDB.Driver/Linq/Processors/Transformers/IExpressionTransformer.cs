@@ -17,10 +17,22 @@ using System.Linq.Expressions;
 
 namespace MongoDB.Driver.Linq.Processors.Transformers
 {
-    internal interface IExpressionTransformer<TExpression> where TExpression : Expression
+    /// <summary>
+    /// TBD
+    /// </summary>
+    /// <typeparam name="TExpression"></typeparam>
+    public interface IExpressionTransformer<TExpression> where TExpression : Expression
     {
+        /// <summary>
+        /// TBD
+        /// </summary>
         ExpressionType[] SupportedNodeTypes { get; }
 
+        /// <summary>
+        /// TBD
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         Expression Transform(TExpression node);
     }
 }
