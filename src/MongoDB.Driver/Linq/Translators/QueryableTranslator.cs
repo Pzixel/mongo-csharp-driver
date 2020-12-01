@@ -218,7 +218,14 @@ namespace MongoDB.Driver.Linq.Translators
             BsonDocument sort = new BsonDocument();
             foreach (var clause in node.Clauses)
             {
-                var field = FieldExpressionFlattener.FlattenFields(clause.Expression) as IFieldExpression;
+                Expression flattenFields = FieldExpressionFlattener.FlattenFields(clause.Expression);
+                var field = flattenFields as IFieldExpression;
+                if (field == null)
+                {
+                    field = flattenFields is UnaryExpression ue && ue.NodeType == ExpressionType.Convert
+                        ? ue.Operand as IFieldExpression
+                        : null;
+                }
                 if (field == null)
                 {
                     throw new NotSupportedException("Only fields are allowed in a $sort.");

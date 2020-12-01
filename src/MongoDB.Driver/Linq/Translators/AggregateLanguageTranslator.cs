@@ -233,20 +233,10 @@ namespace MongoDB.Driver.Linq.Translators
 
         private BsonValue TranslateConditional(ConditionalExpression node)
         {
-            // short path for `if x == null then null else foo(x)` => just `foo(x)` since mongo get all nulls propagated automatically
-            if ((node.Test.NodeType == ExpressionType.Equal || node.Test.NodeType == ExpressionType.NotEqual)
-                && (node.Test as BinaryExpression)?.Right is ConstantExpression constantExpression
-                && constantExpression.Value is null)
+            var flattened = node.TryFlattenIfEqNull();
+            if (flattened != null)
             {
-                if (node.IfTrue is ConstantExpression trueConstantExpression && trueConstantExpression.Value is null)
-                {
-                    return TranslateValue(node.IfFalse);
-                }
-
-                if (node.IfFalse is ConstantExpression falseConstantExpression && falseConstantExpression.Value is null)
-                {
-                    return TranslateValue(node.IfTrue);
-                }
+                return TranslateValue(flattened);
             }
             var condition = TranslateValue(node.Test);
             var truePart = TranslateValue(node.IfTrue);
