@@ -253,6 +253,12 @@ namespace MongoDB.Driver.Linq.Translators
             {
                 value = new BsonDocument("$literal", value);
             }
+
+            if (value is BsonBoolean || value is BsonInt32 || value is BsonInt64)
+            {
+                value = new BsonDocument("$literal", value);
+            }
+
             // NOTE: there may be other instances where we should use a literal...
             // but I can't think of any yet.
             return value;
