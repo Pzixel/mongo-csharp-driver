@@ -19,7 +19,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageDescription>Official .NET driver for MongoDB.</PackageDescription>
     <PackageId>Atlas.MongoDB.Driver</PackageId>
-    <PackageVersion>1.0.6</PackageVersion>
+    <PackageVersion>1.0.7</PackageVersion>
     <PackageProjectUrl>http://www.mongodb.org/display/DOCS/CSharp+Language+Center</PackageProjectUrl>
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <PackageTags>mongodb;mongo;nosql</PackageTags>

@@ -402,6 +402,11 @@ namespace MongoDB.Driver.Linq.Translators
             }
 
             var serializer = BsonSerializer.LookupSerializer(memberType);
+
+            if (member.Name == "Id")
+            {
+                return new FieldExpression(expression, "_id", serializer);
+            }
             return new FieldExpression(expression, member.Name, serializer);
         }
 
