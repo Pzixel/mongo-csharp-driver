@@ -110,7 +110,7 @@ namespace MongoDB.Driver.Linq.Processors.EmbeddedPipeline
                     }
                 }
             }
-            else if (node.NodeType == ExpressionType.Constant)
+            else if (node.NodeType == ExpressionType.Constant || node.NodeType == ExpressionType.Conditional)
             {
                 var sequenceType = node.Type.GetSequenceElementType();
                 if (sequenceType != null)
