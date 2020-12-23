@@ -124,7 +124,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Atlas.MongoDB.Bson" Version="1.0.1" />
     <PackageReference Include="DnsClient" Version="1.3.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.2" PrivateAssets="All" />
     <PackageReference Include="MongoDB.Libmongocrypt" Version="1.1.0-beta02" />
@@ -158,6 +157,10 @@
     <None Include="..\..\License.txt" Pack="true" PackagePath="$(PackageLicenseFile)" />
     <None Include="..\..\THIRD-PARTY-NOTICES" Pack="true" PackagePath="\" />
     <None Include="..\..\packageIcon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MongoDB.Bson\MongoDB.Bson.csproj" />
   </ItemGroup>
 
 </Project>

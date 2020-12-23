@@ -49,11 +49,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Atlas.MongoDB.Bson" Version="1.0.1" />
-    <PackageReference Include="Atlas.MongoDB.Driver.Core" Version="1.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="..\MongoDB.Shared\ApplicationNameHelper.cs" Link="ApplicationNameHelper.cs" />
     <Compile Include="..\MongoDB.Shared\Hasher.cs" Link="Support\Hasher.cs" />
     <Compile Include="..\MongoDB.Shared\SecureStringHelper.cs" Link="Support\SecureStringHelper.cs" />
@@ -62,6 +57,11 @@
   <ItemGroup>
     <None Include="..\..\License.txt" Pack="true" PackagePath="$(PackageLicenseFile)" />
     <None Include="..\..\packageIcon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MongoDB.Bson\MongoDB.Bson.csproj" />
+    <ProjectReference Include="..\MongoDB.Driver.Core\MongoDB.Driver.Core.csproj" />
   </ItemGroup>
 
 </Project>
