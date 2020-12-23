@@ -37,6 +37,7 @@ namespace MongoDB.Bson
             { typeof(byte[]), Conversion.ByteArrayToBsonBinary },
             { typeof(char), Conversion.CharToBsonInt32 },
             { typeof(DateTime), Conversion.DateTimeToBsonDateTime },
+            { typeof(DateTimeOffset), Conversion.DateTimeOffsetToBsonDateTime },
             { typeof(decimal), Conversion.DecimalToBsonDecimal128 },
             { typeof(Decimal128), Conversion.Decimal128ToBsonDecimal128 },
             { typeof(double), Conversion.DoubleToBsonDouble },
